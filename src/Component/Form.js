@@ -1,9 +1,8 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FormContext } from '../context/FormContext';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import CheckIcon from './Checkicon.svg'; // Import your SVG icon
 import './Form.css';
 
 const ApplicationForm = () => {
@@ -41,12 +40,10 @@ const ApplicationForm = () => {
   };
 
   const [formState, setFormState] = useState(initialFormState);
-  const [calculatedValue, setCalculatedValue] = useState(9.25);
 
   const handleCalculatorChange = (value) => {
-    const calculatedAmount = value * 9.25; // Calculate amount based on sharesApplied
+    const calculatedAmount = value * 9.25; // Assuming 9.25 is the per share amount
     setFormState({ ...formState, sharesApplied: value, amountPaid: calculatedAmount.toFixed(2) });
-    setCalculatedValue(calculatedAmount);
   };
 
   const handleChange = (e) => {
@@ -58,33 +55,21 @@ const ApplicationForm = () => {
     e.preventDefault();
     addFormData(formState); // Add form data to context
     setFormState(initialFormState); // Reset form after submission
-    setCalculatedValue(9.25); // Clear calculated value if needed
-
-    // Display toast notification with icon
-    toast.success(<ToastContent />, {
-      position: "top-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
+    // toast.success('Your form has been successfully submitted!', {
+    //   position: "top-center",
+    //   autoClose: 5000,
+    //   hideProgressBar: false,
+    //   closeOnClick: true,
+    //   pauseOnHover: true,
+    //   draggable: true,
+    //   progress: undefined,
+    // });
+    navigate('/table')
   };
-
-  // Custom toast content with icon
-  const ToastContent = () => (
-    <div className="toast-content">
-      {/* <img src={CheckIcon} alt="Success Icon" className="toast-icon" /> */}
-      <div className="toast-message">
-        <p>Your Form has been successfully submitted</p>
-      </div>
-    </div>
-  );
 
   return (
     <div className="form-container">
-      <ToastContainer />
+ <ToastContainer />
       <h2>Application Form</h2>
       <div className="calculator">
         <label>Enter Number of Shares: </label>
@@ -94,18 +79,14 @@ const ApplicationForm = () => {
           max={100000}
           value={formState.sharesApplied}
           onChange={(e) => handleCalculatorChange(parseInt(e.target.value))}
-          className="width"
         />
         <input
           type="text"
-          min={1}
-          max={100000}
           value={formState.sharesApplied}
           onChange={(e) => handleCalculatorChange(parseInt(e.target.value))}
-          className="widt"
         />
         <p>Number of Shares: {formState.sharesApplied}</p>
-        <p>Calculated Value: {calculatedValue.toFixed(2)}</p>
+        <p>Calculated Value: {formState.amountPaid}</p>
       </div>
       <form onSubmit={handleSubmit}>
         {/* Your form fields */}
@@ -213,27 +194,21 @@ const ApplicationForm = () => {
         </div>
         <div className="form-row">
           <div className="form-group">
-            <label>Joint (if applicable) Title</label>
-            <select id="jointTitle" name="jointTitle" value={formState.jointTitle} onChange={handleChange}>
-              <option value="">Select</option>
-              <option value="Mr">Mr</option>
-              <option value="Mrs">Mrs</option>
-              <option value="Miss">Miss</option>
-              <option value="Others">Others</option>
-            </select>
+            <label>Joint Applicant Title</label>
+            <input type="text" id="jointTitle" name="jointTitle" value={formState.jointTitle} onChange={handleChange} />
           </div>
           <div className="form-group">
-            <label>Joint Surname</label>
+            <label>Joint Applicant Surname</label>
             <input type="text" id="jointSurname" name="jointSurname" value={formState.jointSurname} onChange={handleChange} />
           </div>
           <div className="form-group">
-            <label>Joint First Name</label>
+            <label>Joint Applicant First Name</label>
             <input type="text" id="jointFirstName" name="jointFirstName" value={formState.jointFirstName} onChange={handleChange} />
           </div>
-          <div className="form-group">
-            <label>Joint Other Names</label>
-            <input type="text" id="jointOtherNames" name="jointOtherNames" value={formState.jointOtherNames} onChange={handleChange} />
-          </div>
+        </div>
+        <div className="form-group">
+          <label>Joint Applicant Other Names</label>
+          <input type="text" id="jointOtherNames" name="jointOtherNames" value={formState.jointOtherNames} onChange={handleChange} />
         </div>
         <div className="form-row">
           <div className="form-group">
@@ -241,27 +216,25 @@ const ApplicationForm = () => {
             <input type="text" id="bankName" name="bankName" value={formState.bankName} onChange={handleChange} />
           </div>
           <div className="form-group">
-            <label>Bank Verification Number (BVN)</label>
+            <label>BVN</label>
             <input type="text" id="bvn" name="bvn" value={formState.bvn} onChange={handleChange} />
           </div>
-        </div>
-        <div className="form-row">
           <div className="form-group">
             <label>Account Number</label>
             <input type="text" id="accountNumber" name="accountNumber" value={formState.accountNumber} onChange={handleChange} />
           </div>
+        </div>
+        <div className="form-row">
           <div className="form-group">
             <label>Branch</label>
             <input type="text" id="branch" name="branch" value={formState.branch} onChange={handleChange} />
           </div>
           <div className="form-group">
-            <label>City/State</label>
+            <label>City and State</label>
             <input type="text" id="cityState" name="cityState" value={formState.cityState} onChange={handleChange} />
           </div>
         </div>
-        <div className="form-group">
-          <button type="submit">Submit</button>
-        </div>
+        <button type="submit" className="submit-button">Submit</button>
       </form>
     </div>
   );
