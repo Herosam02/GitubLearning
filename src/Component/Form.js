@@ -1,6 +1,9 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FormContext } from '../context/FormContext';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import CheckIcon from './Checkicon.svg'; // Import your SVG icon
 import './Form.css';
 
 const ApplicationForm = () => {
@@ -56,11 +59,32 @@ const ApplicationForm = () => {
     addFormData(formState); // Add form data to context
     setFormState(initialFormState); // Reset form after submission
     setCalculatedValue(9.25); // Clear calculated value if needed
-    navigate('/table'); // Navigate to table page
+
+    // Display toast notification with icon
+    toast.success(<ToastContent />, {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
   };
+
+  // Custom toast content with icon
+  const ToastContent = () => (
+    <div className="toast-content">
+      {/* <img src={CheckIcon} alt="Success Icon" className="toast-icon" /> */}
+      <div className="toast-message">
+        <p>Your Form has been successfully submitted</p>
+      </div>
+    </div>
+  );
 
   return (
     <div className="form-container">
+      <ToastContainer />
       <h2>Application Form</h2>
       <div className="calculator">
         <label>Enter Number of Shares: </label>
