@@ -10,7 +10,6 @@ function TablePage() {
   const [editingIndex, setEditingIndex] = useState(null);
   const [editFields, setEditFields] = useState({});
 
-  // Function to handle downloading data
   const handleDownload = () => {
     const worksheet = XLSX.utils.json_to_sheet(formData);
     const workbook = XLSX.utils.book_new();
@@ -18,7 +17,6 @@ function TablePage() {
     XLSX.writeFile(workbook, 'formData.xlsx');
   };
 
-  // Function to handle uploading data
   const handleUpload = (event) => {
     const file = event.target.files[0];
     const reader = new FileReader();
@@ -34,13 +32,11 @@ function TablePage() {
     reader.readAsArrayBuffer(file);
   };
 
-  // Function to handle editing a row
   const handleEdit = (index) => {
     setEditingIndex(index);
     setEditFields(formData[index]);
   };
 
-  // Function to save edited row
   const handleSaveEdit = (index) => {
     const updatedData = [...formData];
     updatedData[index] = editFields;
@@ -48,18 +44,15 @@ function TablePage() {
     setEditingIndex(null);
   };
 
-  // Function to cancel edit mode
   const handleCancelEdit = () => {
     setEditingIndex(null);
   };
 
-  // Function to delete a row
   const handleDelete = (index) => {
     const updatedData = formData.filter((_, i) => i !== index);
     setBulkFormData(updatedData);
   };
 
-  // Function to handle input change in edit mode
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEditFields({ ...editFields, [name]: value });
